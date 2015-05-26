@@ -2,7 +2,7 @@
   "name": "dislocator",
   "version": "1.0.0",
   "description": "Another service locator",
-  "main": "index.js",
+  "main": "lib/dislocator.js",
   "directories": {
     "test": "test"
   },
