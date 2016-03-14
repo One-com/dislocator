@@ -1,6 +1,6 @@
 var Dislocator = require('../lib/dislocator');
 var expect = require('unexpected')
-    .installPlugin(require('unexpected-sinon'));
+    .use(require('unexpected-sinon'));
 var sinon = require('sinon');
 
 
