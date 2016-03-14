@@ -150,4 +150,51 @@ describe('Dislocator', function () {
         locator.unregister('a');
         expect(locator.a, 'to be', undefined);
     });
+
+    describe('#use', function () {
+        it('should allow registering a service in a .use method', function () {
+            locator.use(function (locator) {
+                locator.register('foo', function () {
+                    return 'bar';
+                });
+            });
+
+            return expect(locator.isRegistered('foo'), 'to be true');
+        });
+
+        it('should allow registering services in more .use method', function () {
+            locator
+                .use(function (locator) {
+                    locator.register('foo', function () {
+                        return 'bar';
+                    });
+                })
+                .use(function (locator) {
+                    locator.register('bar', function () {
+                        return 'baz';
+                    });
+                });
+
+            return expect(locator.isRegistered('foo'), 'to be true').then(function () {
+                return expect(locator.isRegistered('bar'), 'to be true');
+            });
+        });
+
+        it('should allow registering services in a .use method', function () {
+            locator
+                .use(function (locator) {
+                    locator
+                        .register('foo', function () {
+                            return 'bar';
+                        })
+                        .register('bar', function () {
+                            return 'baz';
+                        });
+                });
+
+            return expect(locator.isRegistered('foo'), 'to be true').then(function () {
+                return expect(locator.isRegistered('bar'), 'to be true');
+            });
+        });
+    });
 });
