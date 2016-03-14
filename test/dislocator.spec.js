@@ -1,3 +1,9 @@
+var Dislocator = require('../lib/dislocator');
+var expect = require('unexpected')
+    .installPlugin(require('unexpected-sinon'));
+var sinon = require('sinon');
+
+
 describe('Dislocator', function () {
     var locator;
 
@@ -6,12 +12,12 @@ describe('Dislocator', function () {
     });
 
     it('should have no registrations when new', function () {
-        unexpected(locator.names(), 'to be empty');
+        expect(locator.names(), 'to be empty');
     });
 
     [ 'my-foo', 'my_bar', 'my:baz' ].forEach(function (invalidName) {
         it('should reject invalid names like "' + invalidName + '"', function () {
-            unexpected(function () {
+            expect(function () {
                 locator.register(invalidName, function () {});
             }, 'to throw', 'Invalid name');
         });
@@ -26,30 +32,30 @@ describe('Dislocator', function () {
             return 'bar';
         });
 
-        unexpected(locator.get('myFoo'), 'to equal', 'bar');
-        unexpected(spy, 'was called times', 1);
-        unexpected(spy, 'was called with', 'myFoo');
+        expect(locator.get('myFoo'), 'to equal', 'bar');
+        expect(spy, 'was called times', 1);
+        expect(spy, 'was called with', 'myFoo');
 
         locator.register('myBar', function () {});
-        unexpected(spy, 'was called times', 2);
-        unexpected(spy, 'was called with', 'myBar');
+        expect(spy, 'was called times', 2);
+        expect(spy, 'was called with', 'myBar');
 
         locator.register('myBaz', function () {});
-        unexpected(spy, 'was called times', 3);
-        unexpected(spy, 'was called with', 'myBaz');
+        expect(spy, 'was called times', 3);
+        expect(spy, 'was called with', 'myBaz');
 
     });
 
     it('should throw an error on name collision', function () {
         locator.register('myFoo', function () {});
 
-        unexpected(function () {
+        expect(function () {
             locator.register('myFoo', function () {});
         }, 'to throw', 'Name is already registered');
     });
 
     it('should throw an error when unregistering unknown services', function () {
-        unexpected(function () {
+        expect(function () {
             locator.unregister('myFoo', function () {});
         }, 'to throw', 'No registration named "myFoo"');
     });
@@ -58,40 +64,40 @@ describe('Dislocator', function () {
         var spy = sinon.spy();
         locator.on('unregister', spy);
 
-        unexpected(locator.isRegistered('myFoo'), 'to be false');
+        expect(locator.isRegistered('myFoo'), 'to be false');
 
         locator.register('myFoo', function () {});
-        unexpected(locator.isRegistered('myFoo'), 'to be true');
+        expect(locator.isRegistered('myFoo'), 'to be true');
 
         var service = locator.get('myFoo');
-        unexpected(spy, 'was not called');
+        expect(spy, 'was not called');
         locator.unregister('myFoo');
-        unexpected(locator.isRegistered('myFoo'), 'to be false');
-        unexpected(spy, 'was called times', 1);
-        unexpected(spy, 'was called with', 'myFoo', service);
+        expect(locator.isRegistered('myFoo'), 'to be false');
+        expect(spy, 'was called times', 1);
+        expect(spy, 'was called with', 'myFoo', service);
     });
 
     it('should be able to list and search all service names', function () {
-        unexpected(locator.names(), 'to equal', []);
+        expect(locator.names(), 'to equal', []);
 
         locator.register('myFoo', function () {});
         locator.register('myBar', function () {});
         locator.register('myBaz', function () {});
-        unexpected(locator.names(), 'to equal', ['myFoo', 'myBar', 'myBaz']);
+        expect(locator.names(), 'to equal', ['myFoo', 'myBar', 'myBaz']);
 
-        unexpected(locator.names(/^my.*/), 'to equal', ['myFoo', 'myBar', 'myBaz']);
-        unexpected(locator.names(/Foo$/), 'to equal', ['myFoo']);
-        unexpected(locator.names(/Ba/), 'to equal', ['myBar', 'myBaz']);
+        expect(locator.names(/^my.*/), 'to equal', ['myFoo', 'myBar', 'myBaz']);
+        expect(locator.names(/Foo$/), 'to equal', ['myFoo']);
+        expect(locator.names(/Ba/), 'to equal', ['myBar', 'myBaz']);
     });
 
     it('should be able to tell if a service name is registered', function () {
-        unexpected(locator.isRegistered('myFoo'), 'to be false');
+        expect(locator.isRegistered('myFoo'), 'to be false');
 
         locator.register('myFoo', function () {});
-        unexpected(locator.isRegistered('myFoo'), 'to be true');
+        expect(locator.isRegistered('myFoo'), 'to be true');
 
         locator.unregister('myFoo');
-        unexpected(locator.isRegistered('myFoo'), 'to be false');
+        expect(locator.isRegistered('myFoo'), 'to be false');
     });
 
     it('should call the createrCb function once on first get and emit events', function () {
@@ -100,21 +106,21 @@ describe('Dislocator', function () {
         locator.on('creation', eventSpy);
         locator.register('myFoo', createrSpy);
 
-        unexpected(createrSpy, 'was not called');
-        unexpected(eventSpy, 'was not called');
+        expect(createrSpy, 'was not called');
+        expect(eventSpy, 'was not called');
 
         locator.get('myFoo');
-        unexpected(createrSpy, 'was called times', 1);
-        unexpected(createrSpy, 'was called with', locator);
-        unexpected(eventSpy, 'was called times', 1);
-        unexpected(eventSpy, 'was called with', 'myFoo', locator.get('myFoo'));
+        expect(createrSpy, 'was called times', 1);
+        expect(createrSpy, 'was called with', locator);
+        expect(eventSpy, 'was called times', 1);
+        expect(eventSpy, 'was called with', 'myFoo', locator.get('myFoo'));
 
-        unexpected(createrSpy, 'was called times', 1);
-        unexpected(eventSpy, 'was called times', 1);
+        expect(createrSpy, 'was called times', 1);
+        expect(eventSpy, 'was called times', 1);
     });
 
     it('should throw an error when service doesn\'t exist', function () {
-        unexpected(function () {
+        expect(function () {
             locator.get('non-existing-service');
         }, 'to throw', 'No registration named "non-existing-service"');
     });
@@ -128,20 +134,20 @@ describe('Dislocator', function () {
             locator.get('a');
         });
 
-        unexpected(function () {
+        expect(function () {
             locator.get('a');
         }, 'to throw', 'Circular dependency detected (a <-> b)');
     });
 
     it('should get services as members on the object', function () {
-        unexpected(locator.a, 'to be', undefined);
+        expect(locator.a, 'to be', undefined);
 
         var value = 'a';
         var initFn = function () { return value; };
         locator.register('a', initFn);
-        unexpected(locator.a, 'to be', value);
+        expect(locator.a, 'to be', value);
 
         locator.unregister('a');
-        unexpected(locator.a, 'to be', undefined);
+        expect(locator.a, 'to be', undefined);
     });
 });
