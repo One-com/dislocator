@@ -19,7 +19,7 @@
     "test": "mocha",
     "lint": "standard",
     "coverage": "istanbul --include-all-sources cover _mocha",
-    "travis": "npm run coverage",
+    "travis": "npm run lint && npm run coverage",
     "submit-coveralls": "<coverage/lcov.info coveralls"
   },
   "repository": {
