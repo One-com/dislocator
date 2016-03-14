@@ -16,7 +16,8 @@
   },
   "scripts": {
     "test": "mocha",
-    "coverage": "NODE_ENV=development istanbul cover _mocha -- --reporter spec"
+    "coverage": "NODE_ENV=development istanbul cover _mocha -- --reporter spec",
+    "travis": "npm run coverage"
   },
   "repository": {
     "type": "git",
