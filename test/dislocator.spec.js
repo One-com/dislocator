@@ -44,6 +44,11 @@ describe('Dislocator', function () {
     expect(spy, 'was called with', 'myBaz')
   })
 
+  it('should be able to register a simple value', function () {
+    locator.register('foo', { foo: 'bar' })
+    expect(locator.get('foo'), 'to equal', { foo: 'bar' })
+  })
+
   it('should throw an error on name collision', function () {
     locator.register('myFoo', function () {})
 
