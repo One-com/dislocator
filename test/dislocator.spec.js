@@ -25,25 +25,12 @@ describe('Dislocator', function() {
     });
   });
 
-  it('should be able to register and emit events', function() {
-    var spy = sinon.spy();
-    locator.on('register', spy);
-
+  it('should be able to register a service', function() {
     locator.register('myFoo', function() {
       return 'bar';
     });
 
     expect(locator.get('myFoo'), 'to equal', 'bar');
-    expect(spy, 'was called times', 1);
-    expect(spy, 'was called with', 'myFoo');
-
-    locator.register('myBar', function() {});
-    expect(spy, 'was called times', 2);
-    expect(spy, 'was called with', 'myBar');
-
-    locator.register('myBaz', function() {});
-    expect(spy, 'was called times', 3);
-    expect(spy, 'was called with', 'myBaz');
   });
 
   it('should be able to register a simple value', function() {
@@ -73,21 +60,14 @@ describe('Dislocator', function() {
     );
   });
 
-  it('should forget unregistered service and emit events', function() {
-    var spy = sinon.spy();
-    locator.on('unregister', spy);
-
+  it('should forget unregistered service', function() {
     expect(locator.isRegistered('myFoo'), 'to be false');
 
     locator.register('myFoo', function() {});
     expect(locator.isRegistered('myFoo'), 'to be true');
 
-    var service = locator.get('myFoo');
-    expect(spy, 'was not called');
     locator.unregister('myFoo');
     expect(locator.isRegistered('myFoo'), 'to be false');
-    expect(spy, 'was called times', 1);
-    expect(spy, 'was called with', 'myFoo', service);
   });
 
   it('should be able to list and search all service names', function() {
@@ -113,23 +93,23 @@ describe('Dislocator', function() {
     expect(locator.isRegistered('myFoo'), 'to be false');
   });
 
-  it('should call the createrCb function once on first get and emit events', function() {
-    var createrSpy = sinon.spy();
-    var eventSpy = sinon.spy();
-    locator.on('creation', eventSpy);
-    locator.register('myFoo', createrSpy);
+  it('should call the createrCb function once on first get', function() {
+    var serviceProviderSpy = sinon.spy(function () {
+      return 'myServiceValue';
+    });
 
-    expect(createrSpy, 'was not called');
-    expect(eventSpy, 'was not called');
+    locator.register('myFoo', serviceProviderSpy);
+
+    expect(serviceProviderSpy, 'was not called');
 
     locator.get('myFoo');
-    expect(createrSpy, 'was called times', 1);
-    expect(createrSpy, 'was called with', locator);
-    expect(eventSpy, 'was called times', 1);
-    expect(eventSpy, 'was called with', 'myFoo', locator.get('myFoo'));
+    expect(serviceProviderSpy, 'was called once');
 
-    expect(createrSpy, 'was called times', 1);
-    expect(eventSpy, 'was called times', 1);
+    locator.get('myFoo');
+    locator.get('myFoo');
+    locator.get('myFoo');
+
+    expect(serviceProviderSpy, 'was called once');
   });
 
   it("should throw an error when service doesn't exist", function() {
