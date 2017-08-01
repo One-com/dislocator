@@ -3,6 +3,8 @@
   "version": "1.4.0",
   "description": "Another service locator",
   "main": "lib/dislocator.js",
+  "browser": "dist/dislocator.umd.js",
+  "files": ["dist", "lib"],
   "directories": {
     "test": "test"
   },
@@ -11,11 +13,14 @@
     "eslint": "^3.17.1",
     "eslint-config-pretty-standard": "^0.2.2",
     "jest": "^20.0.4",
+    "rollup": "^0.45.2",
+    "rollup-plugin-commonjs": "^8.0.2",
     "sinon": "1.17.3",
     "unexpected": "10.10.8",
     "unexpected-sinon": "10.2.0"
   },
   "scripts": {
+    "build": "rollup -c",
     "test": "jest --watch",
     "lint": "eslint .",
     "coverage": "jest --coverage",
