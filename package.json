@@ -22,6 +22,7 @@
   "scripts": {
     "build": "rollup -c",
     "test": "jest --watch",
+    "test-nowatch": "jest",
     "lint": "eslint .",
     "coverage": "jest --coverage",
     "travis": "npm run lint && npm run coverage",
