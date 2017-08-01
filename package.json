@@ -8,15 +8,16 @@
   },
   "devDependencies": {
     "coveralls": "2.11.8",
+    "eslint": "^3.17.1",
+    "eslint-config-pretty-standard": "^0.2.2",
     "jest": "^20.0.4",
     "sinon": "1.17.3",
-    "standard": "^7.1.2",
     "unexpected": "10.10.8",
     "unexpected-sinon": "10.2.0"
   },
   "scripts": {
     "test": "jest --watch",
-    "lint": "standard",
+    "lint": "eslint .",
     "coverage": "jest --coverage",
     "travis": "npm run lint && npm run coverage",
     "submit-coveralls": "<coverage/lcov.info coveralls"
