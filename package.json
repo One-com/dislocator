@@ -8,17 +8,16 @@
   },
   "devDependencies": {
     "coveralls": "2.11.8",
-    "istanbul": "0.4.2",
-    "mocha": "2.4.5",
+    "jest": "^20.0.4",
     "sinon": "1.17.3",
     "standard": "^7.1.2",
     "unexpected": "10.10.8",
     "unexpected-sinon": "10.2.0"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "jest --watch",
     "lint": "standard",
-    "coverage": "istanbul --include-all-sources cover _mocha",
+    "coverage": "jest --coverage",
     "travis": "npm run lint && npm run coverage",
     "submit-coveralls": "<coverage/lcov.info coveralls"
   },
