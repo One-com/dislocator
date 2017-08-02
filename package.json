@@ -1,6 +1,6 @@
 {
   "name": "dislocator",
-  "version": "2.0.0-0",
+  "version": "2.0.0-1",
   "description": "Another service locator",
   "main": "dist/dislocator.cjs.js",
   "module": "dist/dislocator.esm.js",
