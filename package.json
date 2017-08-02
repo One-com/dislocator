@@ -4,7 +4,10 @@
   "description": "Another service locator",
   "main": "lib/dislocator.js",
   "browser": "dist/dislocator.umd.js",
-  "files": ["dist", "lib"],
+  "files": [
+    "dist",
+    "lib"
+  ],
   "directories": {
     "test": "test"
   },
@@ -15,6 +18,7 @@
     "jest": "^20.0.4",
     "rollup": "^0.45.2",
     "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-uglify": "^2.0.1",
     "sinon": "1.17.3",
     "unexpected": "10.10.8",
     "unexpected-sinon": "10.2.0"
