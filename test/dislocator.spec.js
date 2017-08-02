@@ -1,10 +1,6 @@
-/* global describe:false, beforeEach:false, it:false */
-import Dislocator from '../src/dislocator';
-import unexpected from 'unexpected';
-import unexpectedSinon from 'unexpected-sinon';
-import sinon from 'sinon';
-
-const expect = unexpected.clone().use(unexpectedSinon);
+const Dislocator = require('../lib/dislocator');
+const expect = require('unexpected').clone().use(require('unexpected-sinon'));
+const sinon = require('sinon');
 
 describe('Dislocator', function() {
   var locator;

@@ -2,7 +2,7 @@
   "name": "dislocator",
   "version": "2.0.0-1",
   "description": "Another service locator",
-  "main": "dist/dislocator.cjs.js",
+  "main": "lib/dislocator.js",
   "module": "dist/dislocator.esm.js",
   "browser": "dist/dislocator.umd.js",
   "files": [

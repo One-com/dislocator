@@ -1,16 +1,15 @@
 import pkg from './package.json';
 import uglifyjs from 'rollup-plugin-uglify';
+import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
 
-const entry = 'src/dislocator.js';
+const entry = 'lib/dislocator.js';
 
 export default [
   {
     format: 'umd',
     moduleName: 'Dislocator',
-    plugins: [
-      babel()
-    ],
+    plugins: [babel(), commonjs()],
     entry,
     sourceMap: true,
     dest: pkg.browser
@@ -18,22 +17,16 @@ export default [
   {
     format: 'umd',
     moduleName: 'Dislocator',
-    plugins: [
-      babel(), uglifyjs()
-    ],
+    plugins: [babel(), commonjs(), uglifyjs()],
     entry,
     sourceMap: true,
     dest: pkg.browser.replace(/.js$/, '.min.js')
   },
   {
     entry,
-    targets: [
-      { dest: pkg.main, format: 'cjs' },
-      { dest: pkg.module, format: 'es' }
-    ],
+    dest: pkg.module,
+    format: 'es',
     sourceMap: true,
-    plugins: [
-      babel()
-    ]
+    plugins: [commonjs()]
   }
 ];
