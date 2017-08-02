@@ -31,6 +31,7 @@ export default [
       { dest: pkg.main, format: 'cjs' },
       { dest: pkg.module, format: 'es' }
     ],
+    sourceMap: true,
     plugins: [
       babel()
     ]
