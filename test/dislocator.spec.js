@@ -17,7 +17,7 @@ it('should have no registrations when new', () => {
     expect(
       () => locator.register(invalidName, () => {}),
       'to throw',
-      'Invalid name'
+      `Invalid service name: "${invalidName}"`
     );
   });
 });
@@ -40,7 +40,7 @@ it('should throw an error on name collision', () => {
   expect(
     () => locator.register('myFoo', () => {}),
     'to throw',
-    'Name is already registered'
+    'A service called "myFoo" is already registered.'
   );
 });
 
@@ -117,7 +117,19 @@ it('should detect circular dependency', () => {
   expect(
     () => locator.get('a'),
     'to throw',
-    'Circular dependency detected (a <-> b)'
+    'Circular dependency detected (a -> b -> a)'
+  );
+});
+
+it('should detect circular dependency with more than 2 services', () => {
+  locator.register('a', locator => locator.get('b'));
+  locator.register('b', locator => locator.get('c'));
+  locator.register('c', locator => locator.get('a'));
+
+  expect(
+    () => locator.get('a'),
+    'to throw',
+    'Circular dependency detected (a -> b -> c -> a)'
   );
 });
 
