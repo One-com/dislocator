@@ -4,77 +4,70 @@ const sinon = require('sinon');
 
 let locator;
 
-beforeEach(function() {
+beforeEach(() => {
   locator = new Dislocator();
 });
 
-it('should have no registrations when new', function() {
+it('should have no registrations when new', () => {
   expect(locator.names(), 'to be empty');
 });
 
-['my-foo', 'my_bar', 'my:baz'].forEach(function(invalidName) {
-  it('should reject invalid names like "' + invalidName + '"', function() {
+['my-foo', 'my_bar', 'my:baz'].forEach(invalidName => {
+  it('should reject invalid names like "' + invalidName + '"', () => {
     expect(
-      function() {
-        locator.register(invalidName, function() {});
-      },
+      () => locator.register(invalidName, () => {}),
       'to throw',
       'Invalid name'
     );
   });
 });
 
-it('should be able to register a service', function() {
-  locator.register('myFoo', function() {
-    return 'bar';
-  });
+it('should be able to register a service', () => {
+  locator.register('myFoo', () => 'bar');
 
   expect(locator.get('myFoo'), 'to equal', 'bar');
 });
 
-it('should be able to register a simple value', function() {
+it('should be able to register a simple value', () => {
   locator.register('foo', { foo: 'bar' });
+
   expect(locator.get('foo'), 'to equal', { foo: 'bar' });
 });
 
-it('should throw an error on name collision', function() {
-  locator.register('myFoo', function() {});
+it('should throw an error on name collision', () => {
+  locator.register('myFoo', () => {});
 
   expect(
-    function() {
-      locator.register('myFoo', function() {});
-    },
+    () => locator.register('myFoo', () => {}),
     'to throw',
     'Name is already registered'
   );
 });
 
-it('should throw an error when unregistering unknown services', function() {
+it('should throw an error when unregistering unknown services', () => {
   expect(
-    function() {
-      locator.unregister('myFoo', function() {});
-    },
+    () => locator.unregister('myFoo', () => {}),
     'to throw',
     'No registration named "myFoo"'
   );
 });
 
-it('should forget unregistered service', function() {
+it('should forget unregistered service', () => {
   expect(locator.isRegistered('myFoo'), 'to be false');
 
-  locator.register('myFoo', function() {});
+  locator.register('myFoo', () => {});
   expect(locator.isRegistered('myFoo'), 'to be true');
 
   locator.unregister('myFoo');
   expect(locator.isRegistered('myFoo'), 'to be false');
 });
 
-it('should be able to list and search all service names', function() {
+it('should be able to list and search all service names', () => {
   expect(locator.names(), 'to equal', []);
 
-  locator.register('myFoo', function() {});
-  locator.register('myBar', function() {});
-  locator.register('myBaz', function() {});
+  locator.register('myFoo', () => {});
+  locator.register('myBar', () => {});
+  locator.register('myBaz', () => {});
   expect(locator.names(), 'to equal', ['myFoo', 'myBar', 'myBaz']);
 
   expect(locator.names(/^my.*/), 'to equal', ['myFoo', 'myBar', 'myBaz']);
@@ -82,20 +75,18 @@ it('should be able to list and search all service names', function() {
   expect(locator.names(/Ba/), 'to equal', ['myBar', 'myBaz']);
 });
 
-it('should be able to tell if a service name is registered', function() {
+it('should be able to tell if a service name is registered', () => {
   expect(locator.isRegistered('myFoo'), 'to be false');
 
-  locator.register('myFoo', function() {});
+  locator.register('myFoo', () => {});
   expect(locator.isRegistered('myFoo'), 'to be true');
 
   locator.unregister('myFoo');
   expect(locator.isRegistered('myFoo'), 'to be false');
 });
 
-it('should call the createrCb function once on first get', function() {
-  var serviceProviderSpy = sinon.spy(function () {
-    return 'myServiceValue';
-  });
+it('should call the createrCb function once on first get', () => {
+  var serviceProviderSpy = sinon.spy(() => 'myServiceValue');
 
   locator.register('myFoo', serviceProviderSpy);
 
@@ -111,41 +102,31 @@ it('should call the createrCb function once on first get', function() {
   expect(serviceProviderSpy, 'was called once');
 });
 
-it("should throw an error when service doesn't exist", function() {
+it("should throw an error when service doesn't exist", () => {
   expect(
-    function() {
-      locator.get('non-existing-service');
-    },
+    () => locator.get('non-existing-service'),
     'to throw',
     'No registration named "non-existing-service"'
   );
 });
 
-it('should detect circular dependency', function() {
-  locator.register('a', function(locator) {
-    locator.get('b');
-  });
-
-  locator.register('b', function(locator) {
-    locator.get('a');
-  });
+it('should detect circular dependency', () => {
+  locator.register('a', locator => locator.get('b'));
+  locator.register('b', locator => locator.get('a'));
 
   expect(
-    function() {
-      locator.get('a');
-    },
+    () => locator.get('a'),
     'to throw',
     'Circular dependency detected (a <-> b)'
   );
 });
 
-it('should get services as members on the object', function() {
+it('should get services as members on the object', () => {
+  const value = 'a';
+  const initFn = () => value;
+
   expect(locator.a, 'to be', undefined);
 
-  var value = 'a';
-  var initFn = function() {
-    return value;
-  };
   locator.register('a', initFn);
   expect(locator.a, 'to be', value);
 
@@ -153,48 +134,34 @@ it('should get services as members on the object', function() {
   expect(locator.a, 'to be', undefined);
 });
 
-describe('#use', function() {
-  it('should allow registering a service in a .use method', function() {
-    locator.use(function(locator) {
-      locator.register('foo', function() {
-        return 'bar';
-      });
+describe('#use', () => {
+  it('should allow registering a service in a .use method', () => {
+    locator.use(locator => {
+      locator.register('foo', () => 'bar');
     });
 
-    return expect(locator.isRegistered('foo'), 'to be true');
+    expect(locator.isRegistered('foo'), 'to be true');
   });
 
-  it('should allow registering services in more .use method', function() {
+  it('should allow registering services in more .use method', () => {
     locator
-    .use(function(locator) {
-      locator.register('foo', function() {
-        return 'bar';
+      .use(locator => {
+        locator.register('foo', () => 'bar');
+      })
+      .use(locator => {
+        locator.register('bar', () => 'baz');
       });
-    })
-    .use(function(locator) {
-      locator.register('bar', function() {
-        return 'baz';
-      });
-    });
 
-    return expect(locator.isRegistered('foo'), 'to be true').then(function() {
-      return expect(locator.isRegistered('bar'), 'to be true');
-    });
+    expect(locator.isRegistered('foo'), 'to be true');
+    expect(locator.isRegistered('bar'), 'to be true');
   });
 
-  it('should allow registering services in a .use method', function() {
-    locator.use(function(locator) {
-      locator
-      .register('foo', function() {
-        return 'bar';
-      })
-      .register('bar', function() {
-        return 'baz';
-      });
+  it('should allow registering services in a .use method', () => {
+    locator.use(locator => {
+      locator.register('foo', () => 'bar').register('bar', () => 'baz');
     });
 
-    return expect(locator.isRegistered('foo'), 'to be true').then(function() {
-      return expect(locator.isRegistered('bar'), 'to be true');
-    });
+    expect(locator.isRegistered('foo'), 'to be true');
+    expect(locator.isRegistered('bar'), 'to be true');
   });
 });
