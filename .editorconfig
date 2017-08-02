@@ -8,3 +8,6 @@ trim_trailing_whitespace = true
 charset = utf-8
 indent_size = 2
 tab_width = 2
+
+[Makefile]
+indent_style = tab
