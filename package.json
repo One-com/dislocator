@@ -1,6 +1,6 @@
 {
   "name": "dislocator",
-  "version": "1.4.0",
+  "version": "2.0.0-0",
   "description": "Another service locator",
   "main": "lib/dislocator.js",
   "browser": "dist/dislocator.umd.js",
