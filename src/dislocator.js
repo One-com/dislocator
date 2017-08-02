@@ -92,4 +92,4 @@ Dislocator.prototype.get = function(name) {
   return this._instances[name];
 };
 
-module.exports = Dislocator;
+export default Dislocator;

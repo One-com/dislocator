@@ -2,7 +2,8 @@
   "name": "dislocator",
   "version": "2.0.0-0",
   "description": "Another service locator",
-  "main": "lib/dislocator.js",
+  "main": "dist/dislocator.cjs.js",
+  "module": "dist/dislocator.esm.js",
   "browser": "dist/dislocator.umd.js",
   "files": [
     "dist",
@@ -12,11 +13,13 @@
     "test": "test"
   },
   "devDependencies": {
+    "babel-preset-env": "^1.6.0",
     "coveralls": "2.11.8",
     "eslint": "^3.17.1",
     "eslint-config-pretty-standard": "^0.2.2",
     "jest": "^20.0.4",
     "rollup": "^0.45.2",
+    "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-uglify": "^2.0.1",
     "sinon": "1.17.3",
@@ -25,8 +28,8 @@
   },
   "scripts": {
     "build": "rollup -c",
-    "test": "jest --watch",
-    "test-nowatch": "jest",
+    "test": "NODE_ENV=commonjs jest --watch",
+    "test-nowatch": "NODE_ENV=commonjs jest",
     "lint": "eslint .",
     "coverage": "jest --coverage",
     "travis": "npm run lint && npm run coverage",
