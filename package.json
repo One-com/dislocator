@@ -31,7 +31,7 @@
     "test": "NODE_ENV=commonjs jest --watch",
     "test-nowatch": "NODE_ENV=commonjs jest",
     "lint": "eslint .",
-    "coverage": "jest --coverage",
+    "coverage": "NODE_ENV=commonjs jest --coverage",
     "travis": "npm run lint && npm run coverage",
     "submit-coveralls": "<coverage/lcov.info coveralls"
   },

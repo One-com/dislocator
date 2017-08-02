@@ -1,19 +1,29 @@
 {
   "presets": [
-    ["env", {
-      "targets": {
-        "uglify": true,
-        "ie": 8
-      },
-	  "modules": false
-    }]
+    [
+      "env",
+      {
+        "targets": {
+          "uglify": true,
+          "ie": 8
+        },
+        "modules": false
+      }
+    ]
   ],
   "env": {
     "commonjs": {
       "presets": [
-        ["env", {
-          "useBuiltIns": false
-        }]
+        [
+          "env",
+          {
+            "targets": {
+              "node": "current"
+            },
+            "useBuiltIns": false,
+            "modules": "commonjs"
+          }
+        ]
       ]
     }
   }
