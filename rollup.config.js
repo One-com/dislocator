@@ -7,6 +7,7 @@ export default [
     moduleName: 'Dislocator',
     plugins: [commonjs()],
     entry: 'lib/dislocator.js',
+    sourceMap: true,
     dest: pkg.browser
   }
 ];
