@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "babel-preset-env": "^1.6.0",
-    "coveralls": "2.11.8",
+    "coveralls": "^3.0.7",
     "eslint": "^3.17.1",
     "eslint-config-pretty-standard": "^0.2.2",
     "mocha": "^6.2.2",
