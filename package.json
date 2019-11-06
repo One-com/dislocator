@@ -17,7 +17,8 @@
     "coveralls": "2.11.8",
     "eslint": "^3.17.1",
     "eslint-config-pretty-standard": "^0.2.2",
-    "jest": "^20.0.4",
+    "mocha": "^6.2.2",
+    "nyc": "^14.1.1",
     "rollup": "^0.45.2",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^8.0.2",
@@ -28,10 +29,9 @@
   },
   "scripts": {
     "build": "rollup -c",
-    "test": "NODE_ENV=commonjs jest --watch",
-    "test-nowatch": "NODE_ENV=commonjs jest",
+    "test": "mocha",
     "lint": "eslint .",
-    "coverage": "NODE_ENV=commonjs jest --coverage",
+    "coverage": "nyc mocha",
     "travis": "npm run lint && npm run coverage",
     "submit-coveralls": "<coverage/lcov.info coveralls"
   },
@@ -48,5 +48,15 @@
   "bugs": {
     "url": "https://github.com/One-com/dislocator/issues"
   },
-  "homepage": "https://github.com/One-com/dislocator"
+  "homepage": "https://github.com/One-com/dislocator",
+  "mocha": {
+    "recursive": true
+  },
+  "nyc": {
+    "cache": true,
+    "reporter": [
+      "lcov",
+      "text"
+    ]
+  }
 }
